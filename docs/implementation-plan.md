@@ -161,8 +161,8 @@ class Resort(BaseModel):
     accommodation_nearby: Optional[bool] = None
 
     # Tier 3: 緩衝區
-    tags: List[str] = []
-    notes_for_future: Optional[str] = None
+    extra_tags: List[str] = []
+    notes: Optional[str] = None
 
     # Meta
     data_source: Optional[DataSource] = None
@@ -234,8 +234,8 @@ class ResortDB(Base):
     lift_count = Column(Integer)
     accommodation_nearby = Column(Boolean)
 
-    tags = Column(JSON)
-    notes_for_future = Column(String)
+    extra_tags = Column(JSON)
+    notes = Column(String)
 
     data_source = Column(JSON)
     last_updated = Column(Date)

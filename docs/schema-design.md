@@ -155,9 +155,9 @@
       "description": "自由標籤，未來可能升級成正式欄位",
       "example": ["IG打卡", "粉雪", "夜滑浪漫"]
     },
-    "notes_for_future": {
+    "notes": {
       "type": "string",
-      "description": "未來功能的備註資訊"
+      "description": "備註資訊、暫時無法評分的原因、補充 context"
     },
 
     // ===== Meta 資訊 =====
@@ -248,8 +248,8 @@
   "lift_count": 12,
   "accommodation_nearby": true,
 
-  "tags": ["交通最方便", "東京當日來回"],
-  "notes_for_future": "新幹線站內就是雪場，最適合不想舟車勞頓的家庭",
+  "extra_tags": ["交通最方便", "東京當日來回"],
+  "notes": "新幹線站內就是雪場，最適合不想舟車勞頓的家庭",
 
   "data_source": {
     "official_website": true,
@@ -300,8 +300,8 @@
   "lift_count": 13,
   "accommodation_nearby": true,
 
-  "tags": ["世界級粉雪", "國際村", "英文友善", "高級度假村"],
-  "notes_for_future": "國際滑雪者比例高，住宿選擇多元，夜生活豐富",
+  "extra_tags": ["世界級粉雪", "國際村", "英文友善", "高級度假村"],
+  "notes": "國際滑雪者比例高，住宿選擇多元，夜生活豐富",
 
   "data_source": {
     "official_website": true,
@@ -333,11 +333,11 @@
       "method": "新幹線+巴士"
     }
   },
-  "target_profile": ["intermediate", "advanced"],
+  "audience_tags": ["intermediate", "advanced"],
 
   "facility_tags": ["溫泉"],
-  "tags": ["粉雪", "溫泉街"],
-  "notes_for_future": "待補充：兒童設施資訊、教練可用性",
+  "extra_tags": ["粉雪", "溫泉街"],
+  "notes": "待補充：兒童設施資訊、教練可用性",
 
   "data_source": {
     "official_website": true

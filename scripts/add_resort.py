@@ -112,12 +112,12 @@ def add_resort_interactive():
         minutes = get_int_input(f"  從 {city} 的時間（分鐘）", min_val=0)
         resort['travel'][city] = minutes
 
-    # 標籤
-    print("\n🏷️  標籤")
+    # 目標客群標籤
+    print("\n🏷️  目標客群標籤（結構化）")
     print("-" * 70)
     print("可用標籤: family, beginner, intermediate, advanced, backcountry, park, powder")
     tags_input = get_input("標籤（用逗號分隔）", "family,beginner")
-    resort['tags'] = [t.strip() for t in tags_input.split(",") if t.strip()]
+    resort['audience_tags'] = [t.strip() for t in tags_input.split(",") if t.strip()]
 
     # 雪場統計（選填）
     print("\n📊 雪場統計（選填，直接按 Enter 跳過）")
@@ -222,7 +222,7 @@ def add_resort_from_args():
         'kids_area': False,
         'coach_available': True,
         'travel': {},
-        'tags': [],
+        'audience_tags': [],
         'facilities': {
             'kids_school': False
         },

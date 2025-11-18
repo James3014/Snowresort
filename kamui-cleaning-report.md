@@ -29,7 +29,7 @@
 | `kids_area` | boolean | `true` | ✅ | 有兒童專區 |
 | `coach_available` | boolean | `true` | ✅ | 教練可進場授課 |
 | `travel` | object | 3 個城市 | ✅ | asahikawa_city, asahikawa_airport, sapporo |
-| `tags` | array | 6 個標籤 | ✅ | family, beginner, intermediate, advanced, backcountry, powder |
+| `audience_tags` | array | 6 個標籤 | ✅ | family, beginner, intermediate, advanced, backcountry, powder |
 
 **Tier 1 完整度：7/7 (100%)**
 
@@ -54,7 +54,7 @@
 
 ## ✅ 評分欄位規則檢查
 
-**新規則：** 僅允許整數 1-5
+**新規則：** 僅允許整數 1–5 或 null
 
 | 欄位 | 值 | 類型 | 範圍 | 狀態 |
 |------|---|------|------|------|
@@ -64,7 +64,8 @@
 **評分一致性檢查：**
 - ✅ 無小數（如 2.5）
 - ✅ 無零值（0）
-- ✅ 無 null
+- ✅ 目前兩個欄位皆為 1–5 的有效整數，無超出範圍數值
+- ✅ 本例無使用 null（皆已完成評分）
 
 ---
 
@@ -74,7 +75,7 @@
 |---------|--------|------|
 | `kids_school` | `true` | ✅ 有值 |
 | `facility_tags` | 未使用此欄位 | ⚪ 無值（用了其他結構） |
-| `slope_count` | `{"beginner": 9, ...}` | ✅ 有值（但結構略不同） |
+| `slope_count` | `{"beginner": 9, "intermediate": 10, "advanced": 6}` | ✅ 有值 |
 | `lift_count` | 未單獨列出 | ⚪ 無值 |
 | `accommodation_nearby` | 未填 | ⚪ 無值 |
 

@@ -81,7 +81,7 @@ def find_similar(resort_id: str, top_n: int = 5) -> List[Dict]:
             score += 1
         if r['price'] == target['price']:
             score += 1
-        score += len(set(r['tags']) & set(target['tags']))
+        score += len(set(r['audience_tags']) & set(target['audience_tags']))
 
         return score
 
@@ -90,7 +90,7 @@ def find_similar(resort_id: str, top_n: int = 5) -> List[Dict]:
     print(f"\n🔍 與「{target['name']}」相似的雪場：")
     print("=" * 60)
     print(f"目標雪場: {target['name']} ({target['name_en']})")
-    print(f"地區: {target['region']} | 價位: {target['price']} | 標籤: {', '.join(target['tags'][:3])}")
+    print(f"地區: {target['region']} | 價位: {target['price']} | 標籤: {', '.join(target['audience_tags'][:3])}")
     print("\n相似雪場：")
     for i, r in enumerate(similar, 1):
         if r['id'] == resort_id:

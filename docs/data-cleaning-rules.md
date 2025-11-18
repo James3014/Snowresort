@@ -48,7 +48,7 @@
 | `kids_area` | boolean | 是否有兒童專區/雪遊區 | Q1 |
 | `coach_available` | boolean | 是否可安排教練進場授課 | Q5 |
 | `travel` | object | 從主要城市的交通時間（分鐘） | Q4 |
-| `tags` | array | 目標客群與特色標籤 | Q1, Q2 |
+| `audience_tags` | array | 目標客群與滑行屬性標籤（值需在規劃好的清單內） | Q1, Q2 |
 
 **評分欄位規則：**
 - `family_score` 和 `beginner_score` **只允許整數 1-5，或 null**
@@ -142,9 +142,11 @@
      - null：資料不足，無法評分（在 notes 註明原因）
    - **配合欄位**：`coach_available` 記錄是否允許教練進場授課（Q5 需求）
 
-5. **目標客群標籤** (`tags`)
+5. **目標客群與滑行屬性標籤** (`audience_tags`)
    - 可複選：`["family", "beginner", "intermediate", "advanced", "backcountry", "park", "powder"]`
    - 依據設施和坡道配置判斷
+   - **重要**：此為結構化標籤，用於篩選與推薦，值需在規劃好的清單內
+   - 自由觀察的標籤請使用 `extra_tags`（見緩衝區設計）
 
 ### Phase 3：補充建議欄位（Week 4）
 **有餘力再填，不強制完成**
@@ -172,20 +174,20 @@
 
 ---
 
-## 五、緩衝區設計（tags & notes）
+## 五、緩衝區設計（extra_tags & notes）
 
 ### 在 schema 中加入兩個彈性欄位：
 
 ```json
 {
-  "tags": ["IG打卡", "夜滑", "粉雪天堂"],
-  "notes_for_future": "這個雪場很適合公司旅遊，附近有大型度假村和溫泉街"
+  "extra_tags": ["IG打卡", "夜滑", "粉雪天堂"],
+  "notes": "這個雪場很適合公司旅遊，附近有大型度假村和溫泉街"
 }
 ```
 
 **使用規則：**
-- `tags`：自由關鍵字，未來可能升級成正式欄位
-- `notes_for_future`：任何想記錄但還沒正式化的資訊
+- `extra_tags`：自由關鍵字，未來觀察是否要升級成正式欄位
+- `notes`：任何想記錄但還沒正式化的資訊，或暫時無法評分的原因、補充 context
 
 ---
 
@@ -257,21 +259,22 @@
     "tokyo": 240,
     "nagano": 90
   },
-  "tags": ["advanced", "backcountry", "powder", "international"],
+  "audience_tags": ["advanced", "backcountry", "powder", "intermediate"],
 
   // 建議欄位 (Tier 2)
   "facilities": {
     "kids_school": true,
     "rental_shop": true
   },
-  "stats": {
-    "beginner_trails": 5,
-    "intermediate_trails": 8,
-    "advanced_trails": 9
+  "slope_count": {
+    "beginner": 5,
+    "intermediate": 8,
+    "advanced": 9
   },
 
-  // 備註
-  "notes": "國際滑雪者多，英文友善，適合進階玩家。1998冬奧場地。"
+  // 緩衝區
+  "extra_tags": ["1998冬奧", "國際村", "英文友善"],
+  "notes": "國際滑雪者多，適合進階玩家。"
 }
 ```
 

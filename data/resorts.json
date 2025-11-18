@@ -16,10 +16,14 @@
       "asahikawa_airport": 60,
       "sapporo": 180
     },
-    "tags": ["family", "beginner", "intermediate", "advanced", "backcountry", "powder"],
+    "audience_tags": ["family", "beginner", "intermediate", "advanced", "backcountry", "powder"],
+    "slope_count": {
+      "beginner": 9,
+      "intermediate": 10,
+      "advanced": 6
+    },
     "stats": {
-      "trails": 25,
-      "beginner_trails": 9,
+      "total_trails": 25,
       "beginner_percentage": 32,
       "vertical_drop": 601,
       "longest_run": 4000,
