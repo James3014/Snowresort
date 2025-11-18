@@ -191,7 +191,7 @@
 **結果：** ✅ 可精準篩選
 
 ### Q2：相似雪場推薦
-**支援欄位：** region, price, tags
+**支援欄位：** region, price, audience_tags
 **神居數據：** hokkaido + mid + 6 個標籤
 **結果：** ✅ 可計算相似度
 
