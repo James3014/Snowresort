@@ -5,24 +5,33 @@
 
 ---
 
-## ✅ Tier 1 必備欄位檢查（11 個）
+## ✅ 基本識別資訊檢查（5 個）
 
 | 欄位名稱 | 規則要求 | 實際值 | 狀態 | 備註 |
 |---------|---------|--------|------|------|
-| `resort_id` | string, kebab-case | `kamui-ski-links` | ✅ | 符合格式 |
-| `name_jp` | string | `神居スキーリンクス` | ✅ | |
-| `name_en` | string (選填) | `Kamui Ski Links` | ✅ | |
+| `id` | string, kebab-case | `kamui-ski-links` | ✅ | 符合格式 |
+| `name` | string | `神居スキーリンクス` | ✅ | |
+| `name_en` | string (選填) | `Kamui Ski Links` | ✅ | 選填但已提供 |
 | `region` | enum | `hokkaido` | ✅ | |
 | `prefecture` | string | `北海道` | ✅ | |
-| `price_level` | enum (budget/mid/premium) | `mid` | ✅ | ¥5,300 日券符合 mid 標準 |
-| `family_friendly_score` | int 1-5 | `4` | ✅ | 有兒童專區+雪校 |
-| `beginner_friendly_level` | int 1-5 | `4` | ✅ | 32% 初級雪道 |
-| **`kids_area`** | boolean | **`true`** | ✅ | **新增欄位** |
-| **`coach_available`** | boolean | **`true`** | ✅ | **升級至 Tier 1** |
-| `travel_time_from_city` | object | 3 個城市 | ✅ | asahikawa_city, asahikawa_airport, sapporo |
-| `target_profile` | array | 6 個標籤 | ✅ | family, beginner, intermediate, advanced, backcountry, powder |
 
-**Tier 1 完整度：11/11 (100%)**
+**基本識別完整度：5/5 (100%)**
+
+---
+
+## ✅ Tier 1 必備欄位檢查（7 個）
+
+| 欄位名稱 | 規則要求 | 實際值 | 狀態 | 備註 |
+|---------|---------|--------|------|------|
+| `price` | enum (budget/mid/premium) | `mid` | ✅ | ¥5,300 日券符合 mid 標準 |
+| `family_score` | int 1-5 或 null | `4` | ✅ | 有兒童專區+雪校 |
+| `beginner_score` | int 1-5 或 null | `4` | ✅ | 32% 初級雪道 |
+| `kids_area` | boolean | `true` | ✅ | 有兒童專區 |
+| `coach_available` | boolean | `true` | ✅ | 教練可進場授課 |
+| `travel` | object | 3 個城市 | ✅ | asahikawa_city, asahikawa_airport, sapporo |
+| `tags` | array | 6 個標籤 | ✅ | family, beginner, intermediate, advanced, backcountry, powder |
+
+**Tier 1 完整度：7/7 (100%)**
 
 ---
 
@@ -140,7 +149,7 @@
 
 | 層級 | 完整度 | 評價 |
 |------|--------|------|
-| **Tier 1 必備** | 11/11 (100%) | ⭐⭐⭐⭐⭐ 優秀 |
+| **Tier 1 必備** | 7/7 (100%) | ⭐⭐⭐⭐⭐ 優秀 |
 | **Tier 2 建議** | 2/5 (40%) | ⭐⭐⭐ 良好 |
 | **額外資訊** | 豐富 | ⭐⭐⭐⭐⭐ 優秀 |
 
@@ -186,12 +195,12 @@
 **結果：** ✅ 可計算相似度
 
 ### Q3：價位篩選
-**支援欄位：** price_level
+**支援欄位：** price
 **神居數據：** mid (¥5,300)
 **結果：** ✅ 明確分類
 
 ### Q4：交通時間篩選
-**支援欄位：** travel_time_from_city
+**支援欄位：** travel
 **神居數據：** 3 個標準城市
 **結果：** ✅ 可精準查詢
 

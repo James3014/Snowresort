@@ -27,28 +27,36 @@
 
 ## 二、欄位分級架構
 
+### 📋 基本識別資訊（必填 + 選填）
+
+| 欄位名稱 | 類型 | 必填 | 說明 |
+|---------|------|------|------|
+| `id` | string | ✅ | 唯一識別碼（kebab-case） |
+| `name` | string | ✅ | 日文名稱 |
+| `name_en` | string | ⚪ | 英文名稱（選填，但建議填寫） |
+| `region` | enum | ✅ | 地區（hokkaido/nagano/niigata等） |
+| `prefecture` | string | ✅ | 都道府縣 |
+
 ### 🔴 必備欄位（Tier 1）- 現在一定會用
-**為 Q1-Q5 而生，每個雪場必須有值**
+**為 Q1-Q5 而生，共 7 個欄位，每個雪場必須有值**
 
 | 欄位名稱 | 類型 | 說明 | 支援問題 |
 |---------|------|------|---------|
-| `resort_id` | string | 唯一識別碼 | 全部 |
-| `name_jp` | string | 日文名稱 | 全部 |
-| `name_en` | string | 英文名稱（選填） | 全部 |
-| `region` | enum | 地區（北海道/長野/新潟等） | Q2, Q4 |
-| `prefecture` | string | 都道府縣 | Q2, Q4 |
-| `price_level` | enum | 價位等級（budget/mid/premium） | Q2, Q3 |
-| `family_friendly_score` | int | 親子友善度 (1-5，僅整數) | Q1, Q2 |
-| `beginner_friendly_level` | int | 初學者友善度 (1-5，僅整數) | Q2, Q5 |
+| `price` | enum | 價位等級（budget/mid/premium） | Q2, Q3 |
+| `family_score` | int | 親子友善度 (1-5) | Q1, Q2 |
+| `beginner_score` | int | 初學者友善度 (1-5) | Q2, Q5 |
 | `kids_area` | boolean | 是否有兒童專區/雪遊區 | Q1 |
 | `coach_available` | boolean | 是否可安排教練進場授課 | Q5 |
-| `travel_time_from_city` | object | 從主要城市的交通時間 | Q4 |
-| `target_profile` | array | 目標客群標籤 | Q1, Q2 |
+| `travel` | object | 從主要城市的交通時間（分鐘） | Q4 |
+| `tags` | array | 目標客群與特色標籤 | Q1, Q2 |
 
 **評分欄位規則：**
-- `family_friendly_score` 和 `beginner_friendly_level` **只允許整數 1-5**
-- ❌ 不允許：0、2.5、null 等值
-- 若無法評分，暫時標記為 3（中等），並在 notes 註明「待補充評分依據」
+- `family_score` 和 `beginner_score` **只允許整數 1-5，或 null**
+- ✅ 允許：1, 2, 3, 4, 5, null
+- ❌ 不允許：0, 2.5, 空字串
+- **null 的使用**：當無法評分時，使用 `null` 並在 `notes` 註明「待評分」
+  - 前端查詢時會將 null 視為「未評估」，排序時放最後
+  - 統計分析時排除 null 值
 
 ### 🟡 建議欄位（Tier 2）- 高機率未來會用
 **不影響 v0 核心問題，但長期有價值**
@@ -80,21 +88,21 @@
 ## 三、清洗優先級
 
 ### Phase 1：建立骨架（Week 1）
-1. 建立雪場清單（resort_id, name_jp, region, prefecture）
+1. 建立雪場清單（id, name, region, prefecture）
 2. 確保每個雪場都有唯一 ID
 3. 建立基礎地區分類
 
 ### Phase 2：填入核心欄位（Week 2-3）
 **按照重要性順序填值：**
 
-1. **價位等級** (`price_level`)
+1. **價位等級** (`price`)
    - 來源：官網票價、住宿價格帶
    - 分類標準：
      - budget: 纜車一日券 < ¥4,000
      - mid: ¥4,000 - ¥6,000
      - premium: > ¥6,000
 
-2. **交通時間** (`travel_time_from_city`)
+2. **交通時間** (`travel`)
    - **標準城市 key 列表**（v0 僅支援以下，必須使用小寫英文）：
      - `"tokyo"` - 東京
      - `"osaka"` - 大阪
@@ -106,34 +114,36 @@
    - 格式：
      ```json
      {
-       "tokyo": {"minutes": 180, "method": "新幹線+巴士"},
-       "asahikawa_city": {"minutes": 30, "method": "巴士"}
+       "tokyo": 180,
+       "asahikawa_city": 30
      }
      ```
    - 來源：官網、Google Maps
-   - **重要**：至少需填入 1 個主要出發城市的交通時間
+   - **重要**：至少需填入 1 個主要出發城市的交通時間（單位：分鐘）
    - ❌ 禁止使用：Tokyo、東京、TOKYO 等不一致的 key
 
-3. **親子友善度** (`family_friendly_score`) **僅整數 1-5**
+3. **親子友善度** (`family_score`) **僅整數 1-5 或 null**
    - 評分標準：
      - 5分：有兒童專區 + 兒童雪校 + 托兒服務
      - 4分：有兒童專區 + 兒童雪校
      - 3分：有兒童專區（kids_area = true）
      - 2分：允許兒童但無特別設施（kids_area = false）
      - 1分：主要為進階滑雪者設計，不適合兒童
+     - null：資料不足，無法評分（在 notes 註明原因）
    - **配合欄位**：`kids_area` 記錄是否有兒童專區（≥3分時通常為 true）
 
-4. **初學者友善度** (`beginner_friendly_level`) **僅整數 1-5**
+4. **初學者友善度** (`beginner_score`) **僅整數 1-5 或 null**
    - 評分標準（主要依據坡道比例）：
      - 5分：>50% 初級坡道 + 專業教學
      - 4分：40-50% 初級坡道
      - 3分：30-40% 初級坡道
      - 2分：<30% 初級坡道
      - 1分：主要為進階者，初級坡道極少
+     - null：資料不足，無法評分（在 notes 註明原因）
    - **配合欄位**：`coach_available` 記錄是否允許教練進場授課（Q5 需求）
 
-5. **目標客群** (`target_profile`)
-   - 可複選：`["family", "beginner", "advanced", "backcountry", "park"]`
+5. **目標客群標籤** (`tags`)
+   - 可複選：`["family", "beginner", "intermediate", "advanced", "backcountry", "park", "powder"]`
    - 依據設施和坡道配置判斷
 
 ### Phase 3：補充建議欄位（Week 4）
@@ -141,16 +151,15 @@
 
 - `kids_school`
 - `facility_tags`
-- `coach_available`
 
 ---
 
 ## 四、資料品質標準
 
 ### 必備欄位完整度要求
-- **100% 必須有值**：resort_id, name_jp, region, prefecture
-- **90% 以上有值**：price_level, family_friendly_score, beginner_friendly_level
-- **80% 以上有值**：travel_time_from_city（至少一個主要城市）
+- **100% 必須有值**：id, name, region, prefecture
+- **90% 以上有值**：price, family_score, beginner_score
+- **80% 以上有值**：travel（至少一個主要城市）
 
 ### 建議欄位完整度要求
 - **60% 以上有值**即可
@@ -159,7 +168,7 @@
 ### 品質檢查點
 1. **一致性**：同一個評分標準在所有雪場都用同樣邏輯
 2. **可驗證**：每個數值都有來源備註
-3. **合理性**：price_level 和實際價格相符
+3. **合理性**：price 和實際價格相符
 
 ---
 
@@ -206,10 +215,11 @@
    - 從官網抓：名稱、地區、聯絡方式
 
 2. **填必備欄位**（15分鐘）
-   - 查價格 → price_level
-   - 看坡道圖 → beginner_friendly_level
-   - 看設施 → family_friendly_score
-   - 查交通 → travel_time_from_city
+   - 查價格 → price
+   - 看坡道圖 → beginner_score
+   - 看設施 → family_score, kids_area
+   - 查交通 → travel
+   - 確認教練 → coach_available
 
 3. **標記 tags**（3分鐘）
    - 看到任何特色就先記在 tags
@@ -231,32 +241,37 @@
 
 ```json
 {
-  "resort_id": "hakuba-happo",
-  "name_jp": "白馬八方尾根スキー場",
+  "id": "hakuba-happo",
+  "name": "白馬八方尾根スキー場",
   "name_en": "Hakuba Happo-one",
   "region": "nagano",
   "prefecture": "長野県",
 
   // 必備欄位 (Tier 1)
-  "price_level": "premium",
-  "family_friendly_score": 3,
-  "beginner_friendly_level": 3,
+  "price": "premium",
+  "family_score": 3,
+  "beginner_score": 3,
   "kids_area": true,
   "coach_available": true,
-  "travel_time_from_city": {
-    "tokyo": {"minutes": 240, "method": "新幹線+巴士"},
-    "nagano": {"minutes": 90, "method": "巴士"}
+  "travel": {
+    "tokyo": 240,
+    "nagano": 90
   },
-  "target_profile": ["advanced", "backcountry"],
+  "tags": ["advanced", "backcountry", "powder", "international"],
 
   // 建議欄位 (Tier 2)
-  "kids_school": true,
-  "facility_tags": ["溫泉", "國際級"],
-  "slope_count": {"beginner": 5, "intermediate": 8, "advanced": 9},
+  "facilities": {
+    "kids_school": true,
+    "rental_shop": true
+  },
+  "stats": {
+    "beginner_trails": 5,
+    "intermediate_trails": 8,
+    "advanced_trails": 9
+  },
 
-  // 緩衝區 (Tier 3)
-  "tags": ["粉雪", "1998冬奧", "國際村"],
-  "notes_for_future": "國際滑雪者多，英文友善，適合進階玩家"
+  // 備註
+  "notes": "國際滑雪者多，英文友善，適合進階玩家。1998冬奧場地。"
 }
 ```
 
