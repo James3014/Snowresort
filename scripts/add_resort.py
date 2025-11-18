@@ -82,24 +82,35 @@ def add_resort_interactive():
     resort['prefecture'] = get_input("都道府縣", "北海道")
     resort['city'] = get_input("城市", required=False)
 
-    # 評分
-    print("\n⭐ 評分（1-5）")
+    # 評分與核心屬性
+    print("\n⭐ 評分與核心屬性（1-5，僅整數）")
     print("-" * 70)
     resort['price'] = get_input("價位等級 (budget/mid/premium)", "mid")
-    resort['family_score'] = get_int_input("親子友善度 (1-5)", min_val=1, max_val=5)
-    resort['beginner_score'] = get_int_input("初學者友善度 (1-5)", min_val=1, max_val=5)
+    resort['family_score'] = get_int_input("親子友善度 (1-5，僅整數)", min_val=1, max_val=5)
+    resort['beginner_score'] = get_int_input("初學者友善度 (1-5，僅整數)", min_val=1, max_val=5)
+    resort['kids_area'] = get_input("是否有兒童專區/雪遊區？(y/n)", "n").lower() == 'y'
+    resort['coach_available'] = get_input("是否允許教練進場授課？(y/n)", "y").lower() == 'y'
 
     # 交通時間
     print("\n🚗 交通時間（分鐘）")
     print("-" * 70)
+    print("⚠️  僅使用標準城市 key（小寫英文）：")
+    print("   tokyo, osaka, nagoya, sapporo, asahikawa_city, asahikawa_airport, nagano")
     resort['travel'] = {}
-    cities = ['tokyo', 'osaka', 'sapporo', 'asahikawa_city', 'asahikawa_airport', 'nagano']
+    cities = ['tokyo', 'osaka', 'nagoya', 'sapporo', 'asahikawa_city', 'asahikawa_airport', 'nagano']
 
-    print("輸入從各城市的交通時間（直接按 Enter 跳過該城市）：")
+    print("\n輸入從各城市的交通時間（直接按 Enter 跳過該城市）：")
+    print("至少需要填入 1 個主要城市")
     for city in cities:
-        minutes = get_int_input(f"  從 {city} 的時間", required=False, min_val=0)
+        minutes = get_int_input(f"  從 {city} 的時間（分鐘）", required=False, min_val=0)
         if minutes:
             resort['travel'][city] = minutes
+
+    if not resort['travel']:
+        print("⚠️  警告：未填入任何交通時間，請至少填入一個主要城市")
+        city = get_input("  請填入一個城市 key", "tokyo")
+        minutes = get_int_input(f"  從 {city} 的時間（分鐘）", min_val=0)
+        resort['travel'][city] = minutes
 
     # 標籤
     print("\n🏷️  標籤")
@@ -121,13 +132,11 @@ def add_resort_interactive():
         resort['stats']['vertical_drop'] = get_int_input("  垂直落差 (米)", required=False, min_val=0)
         resort['stats']['longest_run'] = get_int_input("  最長滑道 (米)", required=False, min_val=0)
 
-    # 設施
-    print("\n🏗️  設施（y/n）")
+    # 設施（Tier 2）
+    print("\n🏗️  設施（Tier 2，選填）")
     print("-" * 70)
     resort['facilities'] = {}
     resort['facilities']['kids_school'] = get_input("  有兒童雪校？(y/n)", "n").lower() == 'y'
-    resort['facilities']['kids_area'] = get_input("  有兒童專區？(y/n)", "n").lower() == 'y'
-    resort['facilities']['coach_available'] = get_input("  有教練服務？(y/n)", "y").lower() == 'y'
     resort['facilities']['rental_shop'] = get_input("  有租借店？(y/n)", "y").lower() == 'y'
 
     # 特色亮點
@@ -210,11 +219,12 @@ def add_resort_from_args():
         'price': sys.argv[5],
         'family_score': int(sys.argv[6]),
         'beginner_score': int(sys.argv[7]),
+        'kids_area': False,
+        'coach_available': True,
         'travel': {},
         'tags': [],
         'facilities': {
-            'kids_school': False,
-            'coach_available': True
+            'kids_school': False
         },
         'data_source': {'manual_inspection': True},
         'last_updated': str(date.today()),

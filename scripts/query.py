@@ -41,8 +41,8 @@ def find_family_friendly(min_score: int = 4) -> List[Dict]:
     for r in results:
         print(f"✓ {r['name']} ({r['name_en']})")
         print(f"  親子友善度: {r['family_score']}/5")
-        print(f"  有兒童雪校: {'是' if r['facilities']['kids_school'] else '否'}")
-        print(f"  有兒童專區: {'是' if r['facilities']['kids_area'] else '否'}")
+        print(f"  有兒童專區: {'是' if r.get('kids_area', False) else '否'}")
+        print(f"  有兒童雪校: {'是' if r.get('facilities', {}).get('kids_school', False) else '否'}")
         print(f"  地區: {r['prefecture']} {r.get('city', '')}")
         print()
 
@@ -187,7 +187,7 @@ def find_beginner_friendly(min_score: int = 4) -> List[Dict]:
         print(f"  初學者友善度: {r['beginner_score']}/5")
         if 'stats' in r:
             print(f"  初級雪道: {r['stats'].get('beginner_trails', 'N/A')} 條 ({r['stats'].get('beginner_percentage', 'N/A')}%)")
-        print(f"  有教練: {'是' if r['facilities'].get('coach_available', False) else '否'}")
+        print(f"  教練可進場: {'是' if r.get('coach_available', False) else '否'}")
         print()
 
     return results

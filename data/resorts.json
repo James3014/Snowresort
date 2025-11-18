@@ -9,6 +9,8 @@
     "price": "mid",
     "family_score": 4,
     "beginner_score": 4,
+    "kids_area": true,
+    "coach_available": true,
     "travel": {
       "asahikawa_city": 30,
       "asahikawa_airport": 60,
@@ -35,8 +37,6 @@
     },
     "facilities": {
       "kids_school": true,
-      "kids_area": true,
-      "coach_available": true,
       "rental_shop": true,
       "restaurants": 3,
       "gondola": true,

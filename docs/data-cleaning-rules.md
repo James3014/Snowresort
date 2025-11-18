@@ -20,7 +20,8 @@
 
 ### Q5：哪些雪場適合帶初學者上課（教練端需求）
 - **使用場景**：教練選擇教學地點
-- **需要資訊**：初學者坡道比例、教學友善度
+- **需要資訊**：初學者坡道比例、教學友善度、**教練可用性**
+- **v0 定義**：Q5 在 v0 版本中包含「教練是否可進場授課」這一條件。適合初學者 = 坡道友善 + 教練可用。
 
 ---
 
@@ -37,22 +38,33 @@
 | `region` | enum | 地區（北海道/長野/新潟等） | Q2, Q4 |
 | `prefecture` | string | 都道府縣 | Q2, Q4 |
 | `price_level` | enum | 價位等級（budget/mid/premium） | Q2, Q3 |
-| `family_friendly_score` | int | 親子友善度 (1-5) | Q1, Q2 |
-| `beginner_friendly_level` | int | 初學者友善度 (1-5) | Q2, Q5 |
+| `family_friendly_score` | int | 親子友善度 (1-5，僅整數) | Q1, Q2 |
+| `beginner_friendly_level` | int | 初學者友善度 (1-5，僅整數) | Q2, Q5 |
+| `kids_area` | boolean | 是否有兒童專區/雪遊區 | Q1 |
+| `coach_available` | boolean | 是否可安排教練進場授課 | Q5 |
 | `travel_time_from_city` | object | 從主要城市的交通時間 | Q4 |
 | `target_profile` | array | 目標客群標籤 | Q1, Q2 |
+
+**評分欄位規則：**
+- `family_friendly_score` 和 `beginner_friendly_level` **只允許整數 1-5**
+- ❌ 不允許：0、2.5、null 等值
+- 若無法評分，暫時標記為 3（中等），並在 notes 註明「待補充評分依據」
 
 ### 🟡 建議欄位（Tier 2）- 高機率未來會用
 **不影響 v0 核心問題，但長期有價值**
 
 | 欄位名稱 | 類型 | 說明 | 預期用途 |
 |---------|------|------|---------|
-| `kids_school` | boolean | 是否有兒童雪校 | 親子功能擴充 |
+| `kids_school` | boolean | 是否有兒童雪校 | 親子功能細分（雪校 vs 遊樂區） |
 | `facility_tags` | array | 設施標籤（溫泉/outlet/室內遊戲區） | 篩選條件擴充 |
-| `coach_available` | boolean | 是否可安排教練 | 教練媒合功能 |
 | `slope_count` | object | 坡道數量（初/中/高級） | 難度分析 |
 | `lift_count` | int | 纜車數量 | 規模評估 |
 | `accommodation_nearby` | boolean | 附近是否有住宿 | 旅遊規劃 |
+
+**說明：**
+- `kids_area`（Tier 1）指兒童玩雪區/雪盆區
+- `kids_school`（Tier 2）指正式的兒童滑雪學校
+- 兩者可同時存在，用途不同
 
 ### ⚪ 未來欄位（Tier 3）- 暫不入 schema
 **先記在 tags 或 notes，等確定要用再正式化**
@@ -83,30 +95,42 @@
      - premium: > ¥6,000
 
 2. **交通時間** (`travel_time_from_city`)
+   - **標準城市 key 列表**（v0 僅支援以下，必須使用小寫英文）：
+     - `"tokyo"` - 東京
+     - `"osaka"` - 大阪
+     - `"nagoya"` - 名古屋
+     - `"sapporo"` - 札幌
+     - `"asahikawa_city"` - 旭川市區
+     - `"asahikawa_airport"` - 旭川機場
+     - `"nagano"` - 長野
    - 格式：
      ```json
      {
        "tokyo": {"minutes": 180, "method": "新幹線+巴士"},
-       "nagano": {"minutes": 60, "method": "巴士"}
+       "asahikawa_city": {"minutes": 30, "method": "巴士"}
      }
      ```
    - 來源：官網、Google Maps
+   - **重要**：至少需填入 1 個主要出發城市的交通時間
+   - ❌ 禁止使用：Tokyo、東京、TOKYO 等不一致的 key
 
-3. **親子友善度** (`family_friendly_score`)
+3. **親子友善度** (`family_friendly_score`) **僅整數 1-5**
    - 評分標準：
-     - 5分：有兒童樂園+雪校+托兒服務
-     - 4分：有兒童專區+雪校
-     - 3分：有兒童專區
-     - 2分：允許兒童但無特別設施
-     - 1分：主要為進階滑雪者設計
+     - 5分：有兒童專區 + 兒童雪校 + 托兒服務
+     - 4分：有兒童專區 + 兒童雪校
+     - 3分：有兒童專區（kids_area = true）
+     - 2分：允許兒童但無特別設施（kids_area = false）
+     - 1分：主要為進階滑雪者設計，不適合兒童
+   - **配合欄位**：`kids_area` 記錄是否有兒童專區（≥3分時通常為 true）
 
-4. **初學者友善度** (`beginner_friendly_level`)
-   - 評分標準：
+4. **初學者友善度** (`beginner_friendly_level`) **僅整數 1-5**
+   - 評分標準（主要依據坡道比例）：
      - 5分：>50% 初級坡道 + 專業教學
      - 4分：40-50% 初級坡道
      - 3分：30-40% 初級坡道
      - 2分：<30% 初級坡道
-     - 1分：主要為進階者
+     - 1分：主要為進階者，初級坡道極少
+   - **配合欄位**：`coach_available` 記錄是否允許教練進場授課（Q5 需求）
 
 5. **目標客群** (`target_profile`)
    - 可複選：`["family", "beginner", "advanced", "backcountry", "park"]`
@@ -203,6 +227,8 @@
 
 ### 範例：白馬八方尾根
 
+**⚠️ 本範例為示意用，實際數值請以清洗結果為準**
+
 ```json
 {
   "resort_id": "hakuba-happo",
@@ -211,27 +237,32 @@
   "region": "nagano",
   "prefecture": "長野県",
 
-  // 必備欄位
+  // 必備欄位 (Tier 1)
   "price_level": "premium",
   "family_friendly_score": 3,
   "beginner_friendly_level": 3,
+  "kids_area": true,
+  "coach_available": true,
   "travel_time_from_city": {
     "tokyo": {"minutes": 240, "method": "新幹線+巴士"},
     "nagano": {"minutes": 90, "method": "巴士"}
   },
   "target_profile": ["advanced", "backcountry"],
 
-  // 建議欄位
+  // 建議欄位 (Tier 2)
   "kids_school": true,
   "facility_tags": ["溫泉", "國際級"],
-  "coach_available": true,
   "slope_count": {"beginner": 5, "intermediate": 8, "advanced": 9},
 
-  // 緩衝區
+  // 緩衝區 (Tier 3)
   "tags": ["粉雪", "1998冬奧", "國際村"],
   "notes_for_future": "國際滑雪者多，英文友善，適合進階玩家"
 }
 ```
+
+**說明：**
+- 本範例僅供參考結構，數值為假設
+- 實際清洗時，所有評分和資料必須基於官方來源或實地調查
 
 ---
 
