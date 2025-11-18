@@ -1,0 +1,169 @@
+[
+  {
+    "id": "kamui-ski-links",
+    "name": "神居スキーリンクス",
+    "name_en": "Kamui Ski Links",
+    "region": "hokkaido",
+    "prefecture": "北海道",
+    "city": "旭川市",
+    "price": "mid",
+    "family_score": 4,
+    "beginner_score": 4,
+    "travel": {
+      "asahikawa_city": 30,
+      "asahikawa_airport": 60,
+      "sapporo": 180
+    },
+    "tags": ["family", "beginner", "intermediate", "advanced", "backcountry", "powder"],
+    "stats": {
+      "trails": 25,
+      "beginner_trails": 9,
+      "beginner_percentage": 32,
+      "vertical_drop": 601,
+      "longest_run": 4000,
+      "elevation_base": 150,
+      "elevation_top": 751,
+      "ungroomed_percentage": 32
+    },
+    "prices_2024_25": {
+      "all_day_adult": 5300,
+      "all_day_child": 1800,
+      "all_day_senior": 4500,
+      "4hour_adult": 4600,
+      "4hour_child": 1600,
+      "4hour_senior": 4100
+    },
+    "facilities": {
+      "kids_school": true,
+      "kids_area": true,
+      "coach_available": true,
+      "rental_shop": true,
+      "restaurants": 3,
+      "gondola": true,
+      "chair_lifts": true
+    },
+    "beginner_trails_detail": [
+      {
+        "name": "Kids Garden",
+        "name_jp": "キッズガーデン",
+        "slope": 6,
+        "description": "極度平緩，適合完全初學者和兒童"
+      },
+      {
+        "name": "First Timer",
+        "name_jp": "レッスン",
+        "number": 2,
+        "length": "700-900m",
+        "slope_avg": "15-20°",
+        "slope_max": 18,
+        "description": "首次滑雪者專用雪道"
+      },
+      {
+        "name": "Gold 1",
+        "name_jp": "ゴールド１",
+        "number": 9,
+        "slope_max": 18,
+        "description": "寬敞筆直，最適合初學者"
+      },
+      {
+        "name": "Family",
+        "name_jp": "ファミリー",
+        "number": 4,
+        "length": "700-900m",
+        "slope_avg": "15-20°",
+        "slope_max": 18,
+        "description": "家庭友善，寬闊安全"
+      },
+      {
+        "name": "Center",
+        "name_jp": "センター",
+        "number": 3,
+        "slope_max": 18,
+        "description": "基地前方便捷練習道"
+      },
+      {
+        "name": "Next Step",
+        "name_jp": "初心者コース",
+        "number": 5,
+        "length": "3000m+",
+        "slope_max": 15,
+        "description": "長距離初級道，從山頂至山腳，適合有基礎的初學者建立信心"
+      }
+    ],
+    "highlights": [
+      "日本最佳本地滑雪勝地",
+      "卓越乾性粉雪",
+      "32%未壓雪雪道",
+      "相對較少人潮",
+      "所有雪道匯集山腳，不易迷路",
+      "經濟實惠的雪票價格"
+    ],
+    "best_for": {
+      "first_timers": true,
+      "families_with_kids": true,
+      "powder_lovers": true,
+      "budget_conscious": true,
+      "those_seeking_less_crowds": true
+    },
+    "season_2024_25": {
+      "opening": "2024-12-14",
+      "closing": "2025-03-31",
+      "daily_hours": "09:00-16:00"
+    },
+    "access": {
+      "from_asahikawa_station": {
+        "method": "道北巴士",
+        "duration": "40-50分鐘",
+        "cost": "800-1000",
+        "frequency": "每日多班"
+      },
+      "from_asahikawa_airport": {
+        "method": "直達巴士",
+        "duration": "60分鐘",
+        "cost": "待確認",
+        "frequency": "每日2班 (09:00, 14:00)"
+      },
+      "from_sapporo": {
+        "method": "火車至旭川站+巴士",
+        "duration": "約3小時",
+        "cost": "5500-6500"
+      }
+    },
+    "ski_schools": [
+      {
+        "name": "JSBA公認神居單板滑雪教室",
+        "languages": ["日文", "英語"],
+        "types": ["雙板", "單板"],
+        "price_reference": "¥6,500 (90-120分鐘)"
+      },
+      {
+        "name": "三浦雄一郎 & Snow Dolphin Ski教室",
+        "languages": ["日文", "英語"],
+        "types": ["雙板", "單板"],
+        "price_reference": "半天¥4,000, 全天¥6,000"
+      },
+      {
+        "name": "Mighty Miura's",
+        "target": "5-12歲兒童",
+        "types": ["雙板"],
+        "price_reference": "¥11,000 (3小時)"
+      }
+    ],
+    "recommended_stay": "旭川市區",
+    "recommended_hotels": [
+      "OMO7旭川 by 星野集團 (提供免費接駁巴士)",
+      "Art Hotel旭川",
+      "JR Inn旭川",
+      "Hotel Wing International旭川站前"
+    ],
+    "notes": "被譽為「日本最佳本地滑雪勝地」，擁有卓越粉雪和相對親民的價格。32%的初級雪道比例和多樣化的地形設計，使其既適合初學者建立技能，也能滿足進階玩家對粉雪的追求。缺乏滑雪進出的度假村設施，但以旭川市區為基地可享受更豐富的城市機能和文化體驗。",
+    "data_source": {
+      "official_website": true,
+      "user_reviews": true,
+      "travel_guides": true,
+      "manual_extraction": true
+    },
+    "last_updated": "2025-11-18",
+    "data_quality": "complete"
+  }
+]
